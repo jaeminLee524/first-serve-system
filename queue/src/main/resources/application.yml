@@ -1,1 +1,2 @@
-spring.application.name=queue
+server:
+  port: 9010
