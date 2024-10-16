@@ -18,9 +18,10 @@ public class UserQueueController {
 
     @PostMapping("")
     public Mono<RegisterUserResponse>  registerUser(
-        @RequestParam("user_id") final Long userId
+        @RequestParam("user_id") final Long userId,
+        @RequestParam(value = "queue", defaultValue = "default") final String  queue
     ) {
-        return userQueueService.registerWaitQueue(userId)
+        return userQueueService.registerWaitQueue(queue, userId)
             .map(RegisterUserResponse::new);
     }
 }

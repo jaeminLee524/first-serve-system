@@ -10,15 +10,15 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UserQueueService {
 
-    public static final String USER_WAIT_QUEUE = "user-wait-queue";
+    public static final String USER_WAIT_QUEUE = "user:wait-queue:%s:";
     private final ReactiveRedisTemplate<String, String> reactiveRedisTemplate;
 
-    public Mono<Long> registerWaitQueue(final Long userId) {
+    public Mono<Long> registerWaitQueue(final String queueName, final Long userId) {
         long unixTimestamp = Instant.now().getEpochSecond();
-        return reactiveRedisTemplate.opsForZSet().add(USER_WAIT_QUEUE, userId.toString(), unixTimestamp)
+        return reactiveRedisTemplate.opsForZSet().add(USER_WAIT_QUEUE.formatted(queueName), userId.toString(), unixTimestamp)
             .filter(result -> result)
             .switchIfEmpty(Mono.error(new Exception("already register user")))
-            .flatMap(i -> reactiveRedisTemplate.opsForZSet().rank(USER_WAIT_QUEUE, userId.toString()))
+            .flatMap(i -> reactiveRedisTemplate.opsForZSet().rank(USER_WAIT_QUEUE.formatted(queueName), userId.toString()))
             .map(i -> i >= 0 ? i + 1 : i);
     }
 }
