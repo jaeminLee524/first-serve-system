@@ -16,9 +16,10 @@ public class UserQueueController {
     private final UserQueueService userQueueService;
 
     @PostMapping("")
-    public Mono<Boolean>  registerUser(
+    public Mono<Long>  registerUser(
         @RequestParam("user_id") final Long userId
     ) {
-        return userQueueService.registerWaitQueue(userId);
+        return userQueueService.
+            registerWaitQueue(userId);
     }
 }
