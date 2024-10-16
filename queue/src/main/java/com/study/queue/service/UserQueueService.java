@@ -1,5 +1,6 @@
 package com.study.queue.service;
 
+import com.study.queue.exception.ErrorCode;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
@@ -17,7 +18,7 @@ public class UserQueueService {
         long unixTimestamp = Instant.now().getEpochSecond();
         return reactiveRedisTemplate.opsForZSet().add(USER_WAIT_QUEUE.formatted(queueName), userId.toString(), unixTimestamp)
             .filter(result -> result)
-            .switchIfEmpty(Mono.error(new Exception("already register user")))
+            .switchIfEmpty(Mono.error(ErrorCode.QUEUE_ALREADY_REGISTERD_USER.build()))
             .flatMap(i -> reactiveRedisTemplate.opsForZSet().rank(USER_WAIT_QUEUE.formatted(queueName), userId.toString()))
             .map(i -> i >= 0 ? i + 1 : i);
     }
