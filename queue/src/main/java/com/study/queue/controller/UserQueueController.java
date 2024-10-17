@@ -24,4 +24,12 @@ public class UserQueueController {
         return userQueueService.registerWaitQueue(queue, userId)
             .map(RegisterUserResponse::new);
     }
+
+    @PostMapping("allow")
+    public Mono<Long> allowUser(
+        @RequestParam(value = "queue", defaultValue = "default") final String queue,
+        @RequestParam(value = "count", defaultValue = "1") final Long count
+    ) {
+        return userQueueService.allowUser(queue, count);
+    }
 }
