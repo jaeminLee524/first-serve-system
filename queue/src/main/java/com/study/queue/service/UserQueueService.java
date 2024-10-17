@@ -11,7 +11,8 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UserQueueService {
 
-    public static final String USER_WAIT_QUEUE = "user:wait-queue:%s:";
+    public static final String USER_WAIT_QUEUE = "user:wait-queue:%s ";
+    public static final String USER_PROCEED_QUEUE = "user:proceed-queue:%s";
     private final ReactiveRedisTemplate<String, String> reactiveRedisTemplate;
 
     public Mono<Long> registerWaitQueue(final String queueName, final Long userId) {
@@ -21,5 +22,11 @@ public class UserQueueService {
             .switchIfEmpty(Mono.error(ErrorCode.QUEUE_ALREADY_REGISTERD_USER.build()))
             .flatMap(i -> reactiveRedisTemplate.opsForZSet().rank(USER_WAIT_QUEUE.formatted(queueName), userId.toString()))
             .map(i -> i >= 0 ? i + 1 : i);
+    }
+
+    public Mono<Long> allowUser(final String queue, final Long count) {
+        return reactiveRedisTemplate.opsForZSet().popMin(USER_WAIT_QUEUE.formatted(queue), count)
+            .flatMap(member -> reactiveRedisTemplate.opsForZSet().add(USER_PROCEED_QUEUE.formatted(queue), member.getValue(), Instant.now().getEpochSecond()))
+            .count();
     }
 }
