@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ApplicationException.class)
-    Mono<? > applicationExceptionHandler(ApplicationException e) {
+    Mono<ResponseEntity<ServerExceptionResponse> > applicationExceptionHandler(ApplicationException e) {
         return Mono.just(ResponseEntity
             .status(e.getHttpStatus())
             .body(new ServerExceptionResponse(e.getCode(), e.getReason())));
