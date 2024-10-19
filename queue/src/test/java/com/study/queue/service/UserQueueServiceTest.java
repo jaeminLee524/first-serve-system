@@ -46,6 +46,17 @@ class UserQueueServiceTest {
     }
 
     @Test
+    void alreadyRegisteredQueue() {
+        StepVerifier.create(userQueueService.registerWaitQueue("default", 100L))
+                .expectNext(1L)
+                .verifyComplete();
+
+        StepVerifier.create(userQueueService.registerWaitQueue("default", 100L))
+                .expectError(ApplicationException.class)
+                .verify();
+    }
+
+    @Test
     void allowUser() {
     }
 
