@@ -1,5 +1,6 @@
 package com.study.queue.controller;
 
+import com.study.queue.dto.AllowUserResponse;
 import com.study.queue.dto.RegisterUserResponse;
 import com.study.queue.service.UserQueueService;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +27,11 @@ public class UserQueueController {
     }
 
     @PostMapping("allow")
-    public Mono<Long> allowUser(
+    public Mono<AllowUserResponse> allowUser(
             @RequestParam(value = "queue", defaultValue = "default") final String queue,
             @RequestParam(value = "count", defaultValue = "1") final Long count
     ) {
-        return userQueueService.allowUser(queue, count);
+        return userQueueService.allowUser(queue, count)
+                .map(allowCount -> AllowUserResponse.of(count, allowCount));
     }
 }

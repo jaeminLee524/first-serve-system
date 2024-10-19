@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UserQueueService {
 
-    public static final String USER_WAIT_QUEUE = "user:wait-queue:%s ";
+    public static final String USER_WAIT_QUEUE = "user:wait-queue:%s";
     public static final String USER_PROCEED_QUEUE = "user:proceed-queue:%s";
     private final ReactiveRedisTemplate<String, String> reactiveRedisTemplate;
 

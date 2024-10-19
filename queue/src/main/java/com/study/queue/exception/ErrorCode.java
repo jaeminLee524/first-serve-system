@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
 
-     QUEUE_ALREADY_REGISTERD_USER(HttpStatus.CONFLICT, "uq-001", "alredy registered in queue"),
+     QUEUE_ALREADY_REGISTERD_USER(HttpStatus.CONFLICT, "uq-001", "already registered in queue"),
     ;
 
     private HttpStatus httpStatus;
