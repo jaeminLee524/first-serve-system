@@ -17,18 +17,18 @@ public class UserQueueController {
     private final UserQueueService userQueueService;
 
     @PostMapping("")
-    public Mono<RegisterUserResponse>  registerUser(
-        @RequestParam("user_id") final Long userId,
-        @RequestParam(value = "queue", defaultValue = "default") final String  queue
+    public Mono<RegisterUserResponse> registerUser(
+            @RequestParam("user_id") final Long userId,
+            @RequestParam(value = "queue", defaultValue = "default") final String queue
     ) {
         return userQueueService.registerWaitQueue(queue, userId)
-            .map(RegisterUserResponse::new);
+                .map(RegisterUserResponse::new);
     }
 
     @PostMapping("allow")
     public Mono<Long> allowUser(
-        @RequestParam(value = "queue", defaultValue = "default") final String queue,
-        @RequestParam(value = "count", defaultValue = "1") final Long count
+            @RequestParam(value = "queue", defaultValue = "default") final String queue,
+            @RequestParam(value = "count", defaultValue = "1") final Long count
     ) {
         return userQueueService.allowUser(queue, count);
     }
