@@ -3,7 +3,6 @@ package com.study.queue.service;
 import com.study.queue.EmbeddedRedis;
 import com.study.queue.exception.ApplicationException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,8 +11,6 @@ import org.springframework.data.redis.connection.ReactiveRedisConnection;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import reactor.test.StepVerifier;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Import(EmbeddedRedis.class)
@@ -57,7 +54,10 @@ class UserQueueServiceTest {
     }
 
     @Test
-    void allowUser() {
+    void emptyAllowUser() {
+        StepVerifier.create(userQueueService.allowUser("default", 3L))
+                .expectNext(0L)
+                .verifyComplete();
     }
 
     @Test
