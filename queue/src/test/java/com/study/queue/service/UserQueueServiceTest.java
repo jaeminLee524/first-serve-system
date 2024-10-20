@@ -97,4 +97,13 @@ class UserQueueServiceTest {
                 .expectNext(false)
                 .verifyComplete();
     }
+
+    @Test
+    void isNotAllowed2() {
+         StepVerifier.create(userQueueService.registerWaitQueue("default", 100L)
+                         .then(userQueueService.allowUser("default", 3L))
+                         .then(userQueueService.isAllowed("default", 101L)))
+                .expectNext(false)
+                .verifyComplete();
+    }
 }
