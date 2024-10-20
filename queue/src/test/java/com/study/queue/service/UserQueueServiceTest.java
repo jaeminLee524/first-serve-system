@@ -92,6 +92,9 @@ class UserQueueServiceTest {
     }
 
     @Test
-    void isAllowed() {
+    void isNotAllowed() {
+         StepVerifier.create(userQueueService.isAllowed("default", 100L))
+                .expectNext(false)
+                .verifyComplete();
     }
 }
